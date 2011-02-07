@@ -106,7 +106,7 @@ public class DatabaseImpl implements Database {
       update(conn, sql, params);
 
     } catch (final SQLException e) {
-      String join = params == null ? null : Joiner.on(",").join(params);
+      String join = params == null ? "" : Joiner.on(",").join(params);
 	logger.log(Level.SEVERE, "Update failed: " + sql + " with params " +
               join, e);
       throw new IllegalStateException(e);
@@ -144,7 +144,7 @@ public class DatabaseImpl implements Database {
 
 	    } catch (final SQLException e) {
 	      logger.severe("Update failed: " + sql + " with params " +
-	              Joiner.on(",").join(params));
+	              paramLog);
 	      throw new IllegalStateException(e);
 	    } finally {
 	    	close(resultSet, stmt, null);
