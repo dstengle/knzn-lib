@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 import com.google.common.base.Joiner;
 
 
-public class DatabaseImpl implements Database {
+public class DatabaseImpl implements TransactionalDatabase {
 
   private static DataSource getDataSource(final String dataSourceName) {
     try {

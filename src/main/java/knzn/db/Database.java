@@ -1,6 +1,5 @@
 package knzn.db;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface Database {
@@ -12,7 +11,5 @@ public interface Database {
       final ResultSetHandler<T> resultSetHandler);
 
   void update(final String sql, final Object[] params);
-
-  void runTransaction(final Transaction transaction) throws SQLException;
 
 }

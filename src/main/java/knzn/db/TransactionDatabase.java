@@ -46,8 +46,4 @@ public class TransactionDatabase implements Database{
     connection.setAutoCommit(autoCommit);
     database.close(null, null, connection);
   }
-
-  public void runTransaction(final Transaction transaction) throws SQLException {
-  }
-
 }
