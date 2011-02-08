@@ -13,8 +13,6 @@ public class TransactionDatabase implements Database{
 
   public TransactionDatabase(final DatabaseImpl database) throws SQLException {
     this.database = database;
-    connection = database.getConnection();
-    connection.setAutoCommit(false);
   }
 
   public <T> List<T> query(final String sql, final Object[] params,
@@ -47,6 +45,9 @@ public class TransactionDatabase implements Database{
   protected void close() throws SQLException {
     connection.setAutoCommit(autoCommit);
     database.close(null, null, connection);
+  }
+
+  public void runTransaction(final Transaction transaction) throws SQLException {
   }
 
 }

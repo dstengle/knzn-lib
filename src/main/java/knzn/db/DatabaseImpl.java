@@ -66,7 +66,7 @@ public class DatabaseImpl implements Database {
 
     PreparedStatement stmt = null;
     ResultSet resultSet = null;
-    String strParams = params == null ? "" : Joiner.on(",").join(params);
+    final String strParams = params == null ? "" : Joiner.on(",").join(params);
     final List<T> list = new ArrayList<T>();
 
     logger.info("Running query: " + sql + " with params " +
@@ -106,7 +106,7 @@ public class DatabaseImpl implements Database {
       update(conn, sql, params);
 
     } catch (final SQLException e) {
-      String join = params == null ? "" : Joiner.on(",").join(params);
+      final String join = params == null ? "" : Joiner.on(",").join(params);
 	logger.log(Level.SEVERE, "Update failed: " + sql + " with params " +
               join, e);
       throw new IllegalStateException(e);
@@ -135,7 +135,7 @@ public class DatabaseImpl implements Database {
 
 	    PreparedStatement stmt = null;
 	    final ResultSet resultSet = null;
-	    String paramLog = params == null ? null : Joiner.on(",").join(params);
+	    final String paramLog = params == null ? null : Joiner.on(",").join(params);
 	    logger.info("Running query: " + sql + " with params " + paramLog);
 	    try {
 	      stmt = conn.prepareStatement(sql);
