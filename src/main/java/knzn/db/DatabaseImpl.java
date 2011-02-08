@@ -66,11 +66,11 @@ public class DatabaseImpl implements Database {
 
     PreparedStatement stmt = null;
     ResultSet resultSet = null;
-
+    String strParams = params == null ? "" : Joiner.on(",").join(params);
     final List<T> list = new ArrayList<T>();
 
     logger.info("Running query: " + sql + " with params " +
-            Joiner.on(",").join(params));
+            strParams);
     try {
 
       stmt = conn.prepareStatement(sql);
