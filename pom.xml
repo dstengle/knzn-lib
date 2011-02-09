@@ -25,5 +25,41 @@
     	<artifactId>hsqldb</artifactId>
     	<version>1.8.0.10</version>
     </dependency>
+    <dependency>
+    	<groupId>org.apache.directory.server</groupId>
+    	<artifactId>apacheds-server-unit</artifactId>
+    	<version>1.0.2</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
+    <dependency>
+    	<groupId>org.slf4j</groupId>
+    	<artifactId>nlog4j</artifactId>
+    	<version>1.2.25</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
   </dependencies>
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>6</version>
+  </parent>
+        <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+             </plugin>
+         </plugins>
+      </build>
+  <scm>
+    <connection>scm:git:git@github.com:kenzanmedia/knzn-lib.git</connection>
+    <developerConnection>scm:git:git@github.com:kenzanmedia/knzn-lib.git</developerConnection>
+    <url>git@github.com:kenzanmedia/knzn-lib.git</url>
+  </scm>
 </project>

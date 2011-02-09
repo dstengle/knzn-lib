@@ -21,9 +21,12 @@ public class LdapTemplate{
 
   public static <E> List<E> search(final LdapTemplate ldapTemplate, final String name,
           final String filter, final SearchResultHandler<E> srMapper) {
-    final SearchControls searchControls = new SearchControls();
-    searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-    return ldapTemplate.search(name, filter, srMapper, searchControls);
+    
+	final SearchControls searchControls = new SearchControls();
+    
+	searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+    
+	return ldapTemplate.search(name, filter, srMapper, searchControls);
   }
 
   public <E> List<E> search(final String name, final String filter,
@@ -35,6 +38,7 @@ public class LdapTemplate{
 
       System.out.println(" - search: " + name);
       System.out.println(" - filter: " + filter);
+      
       final NamingEnumeration<SearchResult> answer = ctx.search(
               name,
               filter,

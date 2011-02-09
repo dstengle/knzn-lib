@@ -18,7 +18,7 @@ public class CrudTest extends TestCase {
   }
 
 
-	private Database db = null;
+	private DatabaseImpl db = null;
 
 	public void testCreate() {
 
@@ -51,7 +51,7 @@ public class CrudTest extends TestCase {
 			db.update(sql, params);
 		}
 
-		//XXX add assert
+		assertSelect("Red", null);
 		System.out.println("\nTable Populated");
 	}
 
@@ -83,6 +83,20 @@ public class CrudTest extends TestCase {
 			assertTrue(lstTs.contains(row));
 		}
 
+	}
+	
+	public void testRollback() throws SQLException{
+		db.runTransaction(new Transaction() {
+			
+			public void doInTransaction(TransactionDatabase database) throws SQLException {
+				database.startTransaction();
+				String color = "Green";
+				database.update("DELETE FROM foo WHERE color = ?", new String[]{color});
+				
+				throw new SQLException("Rollback Test Exception");
+			}
+		});
+		assertSelect("Green", null);
 	}
 
 	public void testUpdate(){
