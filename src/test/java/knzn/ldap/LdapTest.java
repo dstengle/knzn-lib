@@ -75,15 +75,16 @@ public class LdapTest extends AbstractServerTest {
 			
 			public Object handle(SearchResultWrapper searchResult)
 					throws NamingException {
-				return searchResult.getAttribute("cn");
+				return searchResult.getAttribute("ou");
 			}
 		};
 		SearchControls search = new SearchControls();
 		search.setSearchScope(SearchControls.ONELEVEL_SCOPE);
 		
-		List<Object> list =  temp.search("", "(objectClass=*)", result, search);
+		List<Object> list =  temp.search("", "(ou=*)", result, search);
 	
-		assertNotNull(list);
+		assertTrue(list.contains("people"));
+		assertTrue(list.contains("groups"));
 	}
 	
     private Set<String> searchDNs( String filter, String base, int scope ) 
