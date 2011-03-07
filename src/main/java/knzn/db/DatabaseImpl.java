@@ -1,11 +1,13 @@
 package knzn.db;
 
+import com.google.common.base.Function;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,6 +17,8 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 
 public class DatabaseImpl implements TransactionalDatabase {
@@ -66,7 +70,7 @@ public class DatabaseImpl implements TransactionalDatabase {
 
     PreparedStatement stmt = null;
     ResultSet resultSet = null;
-    final String strParams = params == null ? "" : Joiner.on(",").join(params);
+    final String strParams = params == null ? "" : Joiner.on(",").useForNull("null").join(params);
     final List<T> list = new ArrayList<T>();
 
     logger.info("Running query: " + sql + " with params " +
@@ -106,7 +110,8 @@ public class DatabaseImpl implements TransactionalDatabase {
       update(conn, sql, params);
 
     } catch (final SQLException e) {
-      final String join = params == null ? "" : Joiner.on(",").join(params);
+
+      final String join = params == null ? "" : Joiner.on(",").useForNull("null").join(params);
 	logger.log(Level.SEVERE, "Update failed: " + sql + " with params " +
               join, e);
       throw new IllegalStateException(e);
@@ -135,7 +140,8 @@ public class DatabaseImpl implements TransactionalDatabase {
 
 	    PreparedStatement stmt = null;
 	    final ResultSet resultSet = null;
-	    final String paramLog = params == null ? null : Joiner.on(",").join(params);
+
+	    final String paramLog = params == null ? "" : Joiner.on(",").useForNull("null").join(params);
 	    logger.info("Running query: " + sql + " with params " + paramLog);
 	    try {
 	      stmt = conn.prepareStatement(sql);
