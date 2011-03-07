@@ -36,9 +36,12 @@ public class SearchResultWrapper{
 
   public List<String> getAllAttributes(final String attributeName) throws NamingException {
     final List<String> attributeList = new ArrayList<String>();
-    for(final NamingEnumeration<?> all = sr.getAttributes().get(attributeName).getAll(); all.hasMore();){
-      final String attribute = (String) all.next();
-      attributeList.add(attribute);
+    final Attribute attr = sr.getAttributes().get(attributeName);
+    if (attr != null) {
+      for (final NamingEnumeration<?> all = attr.getAll(); all.hasMore();) {
+        final String attribute = (String) all.next();
+        attributeList.add(attribute);
+      }
     }
     return attributeList;
   }
