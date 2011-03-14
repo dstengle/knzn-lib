@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>knzn</groupId>
   <artifactId>base</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.1.1</version>
   <dependencies>
   	<dependency>
   		<groupId>com.google.guava</groupId>
@@ -40,11 +40,7 @@
     	<scope>compile</scope>
     </dependency>
   </dependencies>
-  <parent>
-    <groupId>org.sonatype.oss</groupId>
-    <artifactId>oss-parent</artifactId>
-    <version>6</version>
-  </parent>
+
         <build>
         <plugins>
             <plugin>
