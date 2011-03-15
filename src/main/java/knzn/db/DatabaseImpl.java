@@ -1,13 +1,11 @@
 package knzn.db;
 
-import com.google.common.base.Function;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,8 +15,6 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 
 public class DatabaseImpl implements TransactionalDatabase {
