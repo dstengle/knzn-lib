@@ -10,6 +10,6 @@ public interface Database {
   <T> List<T> query(final String sql,
       final ResultSetHandler<T> resultSetHandler);
 
-  void update(final String sql, final Object[] params);
+  int update(final String sql, final Object[] params);
 
 }
