@@ -24,8 +24,8 @@ public class TransactionDatabase implements Database{
     return database.query(connection, sql, null, resultSetHandler);
   }
 
-  public void update(final String sql, final Object[] params) {
-    database.update(connection, sql, params);
+  public int update(final String sql, final Object[] params) {
+    return database.update(connection, sql, params);
   }
 
   protected void startTransaction() throws SQLException {

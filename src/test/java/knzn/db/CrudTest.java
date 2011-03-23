@@ -23,7 +23,7 @@ public class CrudTest extends TestCase {
 	public void testCreate() {
 
 		db.update("DROP Table foo IF EXISTS", null);
-		db.update("create table foo (color varchar(12))", null);
+		db.update("create table foo (color varchar(12), test varchar(20))", null);
 
 	}
 
@@ -37,7 +37,7 @@ public class CrudTest extends TestCase {
 	}
 
 	public void testInsert() {
-		final String sql = "INSERT INTO foo (color) Values (?)";
+		final String sql = "INSERT INTO foo (color, test) Values (?, ?)";
 
 		final List<String> colors = new ArrayList<String>();
 
@@ -47,7 +47,7 @@ public class CrudTest extends TestCase {
 		colors.add("Green");
 
 		for(final String item : colors){
-			final Object[] params = {item};
+			final Object[] params = {item, null};
 			db.update(sql, params);
 		}
 
@@ -101,8 +101,9 @@ public class CrudTest extends TestCase {
 
 	public void testUpdate(){
 		final String[] params = {"Orange", "Red"};
-		db.update("UPDATE foo SET color = ? WHERE color = ?", params);
-
+		int test1 = db.update("UPDATE foo SET color = ? WHERE color = ?", params);
+                final String[] newParams = {"Color", "Not a Color"};
+                int test2 = db.update("UPDATE foo SET color = ? WHERE color = ?", newParams);
 		assertSelect("Orange", "Red");
 	}
 
