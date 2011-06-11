@@ -109,12 +109,11 @@ public class DatabaseImpl implements TransactionalDatabase {
   }
 
 
-  public void update(final String sql, final Object[] params) {
-    
+  public int update(final String sql, final Object[] params) {
     Connection conn = null;
     try {
       conn  = getConnection();
-      update(conn, sql, params);
+      return update(conn, sql, params);
 
     } catch (final SQLException e) {
       LOGGER.log(Level.SEVERE, "Update failed: " + 
@@ -141,7 +140,7 @@ public class DatabaseImpl implements TransactionalDatabase {
 
   }
 
-  protected void update(final Connection conn, final String sql, final Object[] params) {
+  protected int update(final Connection conn, final String sql, final Object[] params) {
 
 	    PreparedStatement stmt = null;
 	    final ResultSet resultSet = null;
@@ -152,7 +151,7 @@ public class DatabaseImpl implements TransactionalDatabase {
 	    try {
 	      stmt = conn.prepareStatement(sql);
 	      setParams(stmt, params);
-	      stmt.execute();
+	      return stmt.executeUpdate();
 
 	    } catch (final SQLException e) {
 	      LOGGER.severe("Update failed: " + formattedQuery);
