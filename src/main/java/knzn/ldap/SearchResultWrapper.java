@@ -10,16 +10,16 @@ import javax.naming.directory.Attributes;
 import javax.naming.directory.SearchResult;
 
 public class SearchResultWrapper{
-  private final SearchResult sr;
+  private final SearchResult searchResult;
 
-  public SearchResultWrapper(final SearchResult sr) {
-    this.sr = sr;
+  public SearchResultWrapper(final SearchResult searchResult) {
+    this.searchResult = searchResult;
   }
 
   public String getAttribute(final String name) throws NamingException {
     String value = null;
 
-    final Attributes attributes = sr.getAttributes();
+    final Attributes attributes = searchResult.getAttributes();
 
     if(attributes != null){
       final Attribute attr = attributes.get(name);
@@ -31,12 +31,12 @@ public class SearchResultWrapper{
   }
 
   public Attributes getAttributes() {
-    return this.sr.getAttributes();
+    return this.searchResult.getAttributes();
   }
 
   public List<String> getAllAttributes(final String attributeName) throws NamingException {
     final List<String> attributeList = new ArrayList<String>();
-    final Attribute attr = sr.getAttributes().get(attributeName);
+    final Attribute attr = searchResult.getAttributes().get(attributeName);
     if (attr != null) {
       for (final NamingEnumeration<?> all = attr.getAll(); all.hasMore();) {
         final String attribute = (String) all.next();

@@ -1,13 +1,11 @@
 package knzn.db;
 
-import com.google.common.base.Function;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,27 +15,34 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 
 public class DatabaseImpl implements TransactionalDatabase {
 
+  private static class QueryToStringBuilder{
+    
+    private QueryToStringBuilder() {}
+    public static String format(final String query, final Object[] params) {
+      final String paramStr = params == null ? "" : Joiner.on(",").useForNull("null").join(params);
+      return "Query: " + query + " \n  Params: " + paramStr;
+    }
+  }
+  
   private static DataSource getDataSource(final String dataSourceName) {
     try {
       final InitialContext ctx = new InitialContext();
       final String msgDs = (String) ctx.lookup(dataSourceName);
 
-      System.out.println("Using datasoure: " + msgDs);
+      LOGGER.fine("Using datasoure: " + msgDs);
       return (DataSource) ctx.lookup (msgDs);
 
     } catch (final NamingException e) {
-      e.printStackTrace();
+      LOGGER.log(Level.SEVERE, "Could not find data source", e);
       throw new IllegalStateException("Cannot find data source",e);
     }
   }
 
-  private final Logger logger = Logger.getLogger(DatabaseImpl.class.getSimpleName());
+  private static final Logger LOGGER = Logger.getLogger(DatabaseImpl.class.getSimpleName());
 
   private final DataSource dataSource;
 
@@ -58,7 +63,7 @@ public class DatabaseImpl implements TransactionalDatabase {
       return query(conn, sql, params, resultSetHandler);
 
     } catch (final SQLException e) {
-      logger.log(Level.SEVERE, "Query exception: " + sql, e);
+      LOGGER.log(Level.SEVERE, "Query exception: " + sql, e);
       throw new IllegalStateException(e);
     } finally {
       close(null, null, conn);
@@ -68,13 +73,14 @@ public class DatabaseImpl implements TransactionalDatabase {
   protected <T> List<T> query(final Connection conn, final String sql, final Object[] params,
           final ResultSetHandler<T> resultSetHandler) {
 
+    
     PreparedStatement stmt = null;
     ResultSet resultSet = null;
-    final String strParams = params == null ? "" : Joiner.on(",").useForNull("null").join(params);
+    
     final List<T> list = new ArrayList<T>();
 
-    logger.info("Running query: " + sql + " with params " +
-            strParams);
+    final String formattedQuery = QueryToStringBuilder.format(sql, params);
+    LOGGER.info(formattedQuery);
     try {
 
       stmt = conn.prepareStatement(sql);
@@ -86,7 +92,7 @@ public class DatabaseImpl implements TransactionalDatabase {
       }
 
     } catch (final SQLException e) {
-      logger.log(Level.SEVERE, "Query exception: " + sql, e);
+      LOGGER.log(Level.SEVERE, "Query exception: " + formattedQuery, e);
       throw new IllegalStateException(e);
     } finally {
     	close(resultSet, stmt, null);
@@ -104,16 +110,15 @@ public class DatabaseImpl implements TransactionalDatabase {
 
 
   public void update(final String sql, final Object[] params) {
+    
     Connection conn = null;
     try {
       conn  = getConnection();
       update(conn, sql, params);
 
     } catch (final SQLException e) {
-
-      final String join = params == null ? "" : Joiner.on(",").useForNull("null").join(params);
-	logger.log(Level.SEVERE, "Update failed: " + sql + " with params " +
-              join, e);
+      LOGGER.log(Level.SEVERE, "Update failed: " + 
+              QueryToStringBuilder.format(sql, params), e);
       throw new IllegalStateException(e);
     } finally {
       close(null, null, conn);
@@ -122,16 +127,16 @@ public class DatabaseImpl implements TransactionalDatabase {
 
   public void runTransaction(final Transaction transaction) throws SQLException{
 
-    final TransactionDatabase transactionDatabase = new TransactionDatabase(this);
+    final TransactionDatabase transDb = new TransactionDatabase(this);
     try {
-      transactionDatabase.startTransaction();
-      transaction.doInTransaction(transactionDatabase);
-      transactionDatabase.commitTransaction();
+      transDb.startTransaction();
+      transaction.doInTransaction(transDb);
+      transDb.commitTransaction();
     } catch (final Exception e) {
-      logger.log(Level.SEVERE, "Error during transaction.",e);
-      transactionDatabase.rollbackTransaction();
+      LOGGER.log(Level.SEVERE, "Error during transaction.",e);
+      transDb.rollbackTransaction();
     }finally{
-      transactionDatabase.close();
+      transDb.close();
     }
 
   }
@@ -141,16 +146,16 @@ public class DatabaseImpl implements TransactionalDatabase {
 	    PreparedStatement stmt = null;
 	    final ResultSet resultSet = null;
 
-	    final String paramLog = params == null ? "" : Joiner.on(",").useForNull("null").join(params);
-	    logger.info("Running query: " + sql + " with params " + paramLog);
+	    final String formattedQuery = QueryToStringBuilder.format(sql, params);
+	    LOGGER.info(formattedQuery);
+	    
 	    try {
 	      stmt = conn.prepareStatement(sql);
 	      setParams(stmt, params);
 	      stmt.execute();
 
 	    } catch (final SQLException e) {
-	      logger.severe("Update failed: " + sql + " with params " +
-	              paramLog);
+	      LOGGER.severe("Update failed: " + formattedQuery);
 	      throw new IllegalStateException(e);
 	    } finally {
 	    	close(resultSet, stmt, null);
@@ -158,7 +163,7 @@ public class DatabaseImpl implements TransactionalDatabase {
 	  }
 
   protected void close(final ResultSet resultSet, final Statement stmt,
-          Connection conn) {
+         final Connection conn) {
     try {
       if (resultSet != null) {
         resultSet.close();
@@ -168,7 +173,6 @@ public class DatabaseImpl implements TransactionalDatabase {
       }
       if (conn != null) {
         conn.close();
-        conn = null;
       }
     } catch (final SQLException e) {
       throw new IllegalStateException(e);

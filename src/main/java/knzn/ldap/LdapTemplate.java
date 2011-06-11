@@ -3,6 +3,8 @@ package knzn.ldap;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
@@ -13,6 +15,8 @@ import javax.naming.directory.SearchResult;
 
 public class LdapTemplate{
 
+  private static final Logger LOGGER = Logger.getLogger(
+          LdapTemplate.class.getSimpleName());
   private final Hashtable<String, String> env;
 
   public LdapTemplate(final Hashtable<String, String> env) {
@@ -36,8 +40,8 @@ public class LdapTemplate{
     try {
       ctx = new InitialDirContext(env);
 
-      System.out.println(" - search: " + name);
-      System.out.println(" - filter: " + filter);
+      LOGGER.info(" - search: " + name);
+      LOGGER.info(" - filter: " + filter);
       
       final NamingEnumeration<SearchResult> answer = ctx.search(
               name,
@@ -51,15 +55,15 @@ public class LdapTemplate{
                 new SearchResultWrapper(answer.nextElement())));
         count++;
       }
-      System.out.println(" count: " + count);
+      LOGGER.info(" - count: " + count);
 
     } catch (final NamingException e) {
-      e.printStackTrace();
+      LOGGER.log(Level.SEVERE, "Could not search ldap", e);
     }finally{
       try {
         ctx.close();
       } catch (final NamingException e) {
-        e.printStackTrace();
+        LOGGER.log(Level.SEVERE, "Could not close context", e);
       }
     }
 

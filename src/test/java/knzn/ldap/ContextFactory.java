@@ -6,7 +6,10 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.naming.directory.InitialDirContext;
 
-public class ContextFactory {
+public final class ContextFactory {
+  
+  private ContextFactory() {}
+  
 	private static Hashtable<String, String> env = 
 		InitialDirectoryContextFactory.createBaseEnv(
 				"uid=admin, ou=system", "secret", "o=sevenSeas", "simple");
