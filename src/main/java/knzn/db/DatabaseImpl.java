@@ -143,7 +143,6 @@ public class DatabaseImpl implements TransactionalDatabase {
   protected int update(final Connection conn, final String sql, final Object[] params) {
 
 	    PreparedStatement stmt = null;
-	    final ResultSet resultSet = null;
 
 	    final String formattedQuery = QueryToStringBuilder.format(sql, params);
 	    LOGGER.info(formattedQuery);
@@ -157,7 +156,7 @@ public class DatabaseImpl implements TransactionalDatabase {
 	      LOGGER.severe("Update failed: " + formattedQuery);
 	      throw new IllegalStateException(e);
 	    } finally {
-	    	close(resultSet, stmt, null);
+	    	close(null, stmt, null);
 	    }
 	  }
 
