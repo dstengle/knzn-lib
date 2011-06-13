@@ -1,0 +1,11 @@
+<wonder_pets>
+	<wonder_pet type="turtle">
+		<name>Tuck</name>
+	</wonder_pet>
+	<wonder_pet type="guinea pig">
+		<name>Lenny</name>
+	</wonder_pet>
+	<wonder_pet type="boy">
+		<name>Jonah</name>
+	</wonder_pet>
+</wonder_pets>
