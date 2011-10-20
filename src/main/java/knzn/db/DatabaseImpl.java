@@ -183,7 +183,9 @@ public class DatabaseImpl implements TransactionalDatabase {
       int count = 1;
       for (final Object object : params) {
     	  if (object instanceof java.sql.Date) {
-    		  stmt.setDate(count++, (java.sql.Date)object);
+    		  stmt.setDate(count++, (java.sql.Date) object);
+    	  } else if (object instanceof java.sql.Timestamp) {
+    		  stmt.setTimestamp(count++, (java.sql.Timestamp) object);
     	  } else {
     		  stmt.setObject(count++, object);
     	  }
