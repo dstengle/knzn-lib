@@ -54,8 +54,9 @@
          </plugins>
       </build>
   <scm>
-    <connection>scm:git:git://github.com:kenzanmedia:knzn-lib.git</connection>
-    <url>git://github.com:kenzanmedia:knzn-lib.git</url>
+      <connection>scm:git:git@github.com:kenzanmedia/knzn-lib.git</connection>
+      <url>scm:git:git@github.com:kenzanmedia/knzn-lib.git</url>
+      <developerConnection>scm:git:git@github.com:kenzanmedia/knzn-lib.git</developerConnection>
   </scm>
 
 </project>
