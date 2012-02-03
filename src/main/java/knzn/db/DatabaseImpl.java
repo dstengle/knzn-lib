@@ -69,6 +69,21 @@ public class DatabaseImpl implements TransactionalDatabase {
       close(null, null, conn);
     }
   }
+  
+  public <T> List<T> query(final String sql, final ResultSetHandler<T> resultSetHandler, Object... params) {
+
+    Connection conn = null;
+    try {
+      conn  = getConnection();
+      return query(conn, sql, params, resultSetHandler);
+
+    } catch (final SQLException e) {
+      LOGGER.log(Level.SEVERE, "Query exception: " + sql, e);
+      throw new IllegalStateException(e);
+    } finally {
+      close(null, null, conn);
+    }
+  }
 
   protected <T> List<T> query(final Connection conn, final String sql, final Object[] params,
           final ResultSetHandler<T> resultSetHandler) {
