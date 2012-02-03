@@ -59,11 +59,4 @@
     <url>git@github.com:kenzanmedia/knzn-lib.git</url>
   </scm>
 
-<distributionManagement>
-  <repository>
-    <id>archiva.internal</id>
-    <name>Repository Name</name>
-    <url>http://em62.emedia.cv.net:8080/archiva/repository/internal</url>
-  </repository>
-</distributionManagement>
 </project>
