@@ -124,7 +124,7 @@ public class DatabaseImpl implements TransactionalDatabase {
   }
 
 
-  public int update(final String sql, final Object[] params) {
+  public int update(final String sql, final Object... params) {
     Connection conn = null;
     try {
       conn  = getConnection();

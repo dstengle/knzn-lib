@@ -23,8 +23,13 @@ public class TransactionDatabase implements Database{
   public <T> List<T> query(final String sql, final ResultSetHandler<T> resultSetHandler) {
     return database.query(connection, sql, null, resultSetHandler);
   }
+  
+  public <T> List<T> query(String sql, ResultSetHandler<T> resultSetHandler,
+          Object... params) {
+    return database.query(connection, sql, params, resultSetHandler);
+  }
 
-  public int update(final String sql, final Object[] params) {
+  public int update(final String sql, final Object... params) {
     return database.update(connection, sql, params);
   }
 
